@@ -1,27 +1,63 @@
-import { Card,  CardContent, CardMedia, Container ,Grid,TextField, Typography} from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  CardActionArea,
+} from "@mui/material";
 
-export default function Recipes () {
-    return(
-       <Container sx={{my:'2rem'}} maxWidth="sm">
-           <TextField fullWidth id="outlined-basic" label="Enter a keyword to search Recipes and press enter" variant="outlined" />
+import { useState } from "react";
 
-    
+export default function Recipes() {
+const [recipes, setRecipes] = useState([]);
 
-          <Grid sx={{mt:'1rem'}} container spacing={3}>
-          <Grid item xs={4}>
-            <Card>
-
-            
-                <CardMedia 
-                sx={{height:200}} 
-                image="https://media.istockphoto.com/id/1353473329/photo/chicken-chili.jpg?s=1024x1024&w=is&k=20&c=w1DUsmGFTIritEVNGbGNi2AjzTNahG3cHOe6e4qdSQ0=" />
-            </Card>
-            <CardContent>
-                <Typography variant="h5">Stew</Typography>
-            </CardContent>
-          </Grid>
-          </Grid>
-          
-        </Container>
+const getRecipes =() => {
+    // fetch recipes from API 
+    fetch("https://api.spoonacular.com/recipes/complexSearch")
+    .then(response => response.json())
+    .then (data => {
+        //update recipes state
+        console.log(data);
+    })
+   .catch(error => {
+    console.log(error);
+   }
     )
+}  
+
+  return (
+    <Container sx={{ my: "2rem" }}>
+      <TextField
+        fullWidth
+        id="outlined-basic"
+        label="Enter a keyword to search Recipes and press enter"
+        variant="outlined"
+      />
+
+      <Grid sx={{ mt: "1rem" }} container spacing={3}>
+        <Grid item xs={4}>
+          <Card sx={{ maxWidth: 345 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="140"
+                image="https://www.wholesomeyum.com/wp-content/uploads/2022/08/wholesomeyum-Pork-Stew-18.jpg"
+                alt="green iguana"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Stew
+                </Typography>
+                
+                
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
+  );
 }
