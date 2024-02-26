@@ -9,24 +9,31 @@ import {
   CardActionArea,
 } from "@mui/material";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Recipes() {
 const [recipes, setRecipes] = useState([]);
 
 const getRecipes =() => {
+    // prepare URL
+    const url = new URL ("https://api.spoonacular.com/recipes/complexSearch");
+    url.searchParams.append('apiKey','039cd676e3524ec4bf356a902d2bfdff');
+   
     // fetch recipes from API 
-    fetch("https://api.spoonacular.com/recipes/complexSearch")
+    fetch(url)
+    
     .then(response => response.json())
     .then (data => {
         //update recipes state
-        console.log(data);
+        setRecipes(data.results);
+        // console.log(data);
     })
    .catch(error => {
     console.log(error);
    }
     )
 }  
+ useEffect(getRecipes,[]);
 
   return (
     <Container sx={{ my: "2rem" }}>
@@ -38,25 +45,25 @@ const getRecipes =() => {
       />
 
       <Grid sx={{ mt: "1rem" }} container spacing={3}>
-        <Grid item xs={4}>
-          <Card sx={{ maxWidth: 345 }}>
-            <CardActionArea>
+        {recipes.map(recipe => (<Grid key={recipe.id}item xs={4}>
+          <Card sx={{ maxWidth: 345, height: '100%' }}>
+            <CardActionArea sx={{height: '100%' }}>
               <CardMedia
                 component="img"
                 height="140"
-                image="https://www.wholesomeyum.com/wp-content/uploads/2022/08/wholesomeyum-Pork-Stew-18.jpg"
-                alt="green iguana"
+                image={recipe.image}
+                alt={recipe.title}
               />
-              <CardContent>
+              <CardContent sx={{height: '100%' }}>
                 <Typography gutterBottom variant="h5" component="div">
-                  Stew
+                 {recipe.title}
                 </Typography>
                 
                 
               </CardContent>
             </CardActionArea>
           </Card>
-        </Grid>
+        </Grid>))}
       </Grid>
     </Container>
   );
