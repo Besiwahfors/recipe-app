@@ -10,14 +10,18 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
+import emptyIcon from "../../Assets/Images/empty.svg"
 
 export default function Recipes() {
 const [recipes, setRecipes] = useState([]);
+const [keyword, setKeyword] = useState("");
 
 const getRecipes =() => {
     // prepare URL
     const url = new URL ("https://api.spoonacular.com/recipes/complexSearch");
-    url.searchParams.append('apiKey','039cd676e3524ec4bf356a902d2bfdff');
+    url.searchParams.append('apiKey', process.env.REACT_APP_SPOONACULAR_API_KEY);
+    url.searchParams.append('query', keyword);
+   
    
     // fetch recipes from API 
     fetch(url)
@@ -33,7 +37,7 @@ const getRecipes =() => {
    }
     )
 }  
- useEffect(getRecipes,[]);
+ useEffect(getRecipes,[keyword]);
 
   return (
     <Container sx={{ my: "2rem" }}>
@@ -42,12 +46,14 @@ const getRecipes =() => {
         id="outlined-basic"
         label="Enter a keyword to search Recipes and press enter"
         variant="outlined"
+        onKeyDown={event => event.key === 'Enter' && setKeyword(event.target.value)}
       />
 
       <Grid sx={{ mt: "1rem" }} container spacing={3}>
-        {recipes.map(recipe => (<Grid key={recipe.id}item xs={4}>
+        {recipes.length > 0 ? recipes.map(recipe => (<Grid key={recipe.id}item xs={4}>
           <Card sx={{ maxWidth: 345, height: '100%' }}>
             <CardActionArea sx={{height: '100%' }}>
+
               <CardMedia
                 component="img"
                 height="140"
@@ -58,12 +64,11 @@ const getRecipes =() => {
                 <Typography gutterBottom variant="h5" component="div">
                  {recipe.title}
                 </Typography>
-                
-                
-              </CardContent>
+                </CardContent>
             </CardActionArea>
+
           </Card>
-        </Grid>))}
+        </Grid>)): <img src={emptyIcon} width="30%"/>}
       </Grid>
     </Container>
   );
