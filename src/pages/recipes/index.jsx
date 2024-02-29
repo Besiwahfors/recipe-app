@@ -8,7 +8,7 @@ import {
   Typography,
   CardActionArea,
 } from "@mui/material";
-
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import emptyIcon from "../../Assets/Images/empty.svg";
 import loadingIcon from "../../Assets/Images/fade-stagger-circles.svg";
@@ -69,6 +69,8 @@ const getRecipes =() => {
                 alt={recipe.title}
               />
               <CardContent sx={{height: '100%' }}>
+
+
                 <Link to={`/recipes/${recipe.id}`}>
                 <Typography gutterBottom variant="h5" component="div">
                  {recipe.title}
