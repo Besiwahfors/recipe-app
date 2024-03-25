@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import emptyIcon from "../../Assets/Images/empty.svg";
 import loadingIcon from "../../Assets/Images/fade-stagger-circles.svg";
+import Navbar from "../../components/navbar";
 
 
 export default function Recipes() {
@@ -22,19 +23,21 @@ const [loading, setLoading] = useState("false");
 
 const getRecipes =() => {
   setLoading(true);
+
     // prepare URL
-    const url = new URL ("https://api.spoonacular.com/recipes/complexSearch");
-    url.searchParams.append('apiKey', process.env.REACT_APP_SPOONACULAR_API_KEY);
-    url.searchParams.append('query', keyword);
+    // const url = new URL ("https://api.spoonacular.com/recipes/complexSearch");
+    const url = new URL (`${process.env.REACT_APP_RECIPE_API_URL}/recipes`);
+    // url.searchParams.append('apiKey', process.env.REACT_APP_SPOONACULAR_API_KEY);
+    // url.searchParams.append('query', keyword);
    
    
     // fetch recipes from API 
     fetch(url)
-    
     .then(response => response.json())
     .then (data => {
         //update recipes state
-        setRecipes(data.results);
+        // setRecipes(data.results);
+        setRecipes(data);
         // console.log(data);
     })
    .catch(error => {
@@ -46,6 +49,8 @@ const getRecipes =() => {
  useEffect(getRecipes,[keyword]);
 
   return (
+   <>
+   <Navbar />
     <Container sx={{ my: "2rem" }}>
       <TextField
         fullWidth
@@ -56,9 +61,9 @@ const getRecipes =() => {
       />
 
       <Grid sx={{ mt: "1rem", justifyContent:"center"}} container spacing={3}>
-      { loading ? <img src= {loadingIcon} width="100%"/> : recipes.length > 0 ? 
+      { loading ? <img src= {loadingIcon} width="100%" alt="Preloader"/> : recipes.length > 0 ? 
           recipes.map(recipe =>
-      (<Grid key={recipe.id}item xs={4}>
+      (<Grid key={recipe._id}item xs={4}>
           <Card sx={{ maxWidth: 345, height: '100%' }}>
             <CardActionArea sx={{height: '100%' }}>
 
@@ -71,7 +76,7 @@ const getRecipes =() => {
               <CardContent sx={{height: '100%' }}>
 
 
-                <Link to={`/recipes/${recipe.id}`}>
+                <Link to={`/recipes/${recipe._id}`}>
                 <Typography gutterBottom variant="h5" component="div">
                  {recipe.title}
                 </Typography>
@@ -81,11 +86,12 @@ const getRecipes =() => {
 
           </Card>
         </Grid>
-        )) : <img src={emptyIcon} width="30%"/>
+        )) : <img src={emptyIcon} width="30%" alt="Search not found"/>
       }   
     </Grid>
          
     </Container>
+   </>
   );
 }
 

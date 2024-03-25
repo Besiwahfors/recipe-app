@@ -1,4 +1,5 @@
-import { AppBar,Toolbar, Typography} from "@mui/material";
+import { AppBar,Button,Toolbar, Typography} from "@mui/material";
+import { Link } from "react-router-dom";
 
 
 export default function Navbar() {
@@ -6,10 +7,10 @@ export default function Navbar() {
         <AppBar color="warning" position="static">
         <Toolbar>
          
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography to="/recipes" component={Link} sx={{ flexGrow: 1 }}>
             Recipe App
           </Typography>
-        
+        <Button to="/add-recipe" variant="contained" component={Link} color="primary">Add to Recipes</Button>
         </Toolbar>
       </AppBar>
     );
