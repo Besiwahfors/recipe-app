@@ -70,12 +70,11 @@ const getRecipes =() => {
               <CardMedia
                 component="img"
                 height="140"
-                image={recipe.image}
+                image={`${process.env.REACT_APP_RECIPE_API_URL}/${recipe.image}`}
                 alt={recipe.title}
               />
               <CardContent sx={{height: '100%' }}>
-
-
+                
                 <Link to={`/recipes/${recipe._id}`}>
                 <Typography gutterBottom variant="h5" component="div">
                  {recipe.title}
